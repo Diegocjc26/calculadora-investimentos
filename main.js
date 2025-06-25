@@ -165,7 +165,17 @@ function clearForm() {
 
   for (const errorInputContainer of errorInputContainers) {
     errorInputContainer.classList.remove("error");
-    errorInputContainer.parentElement.querySelector("p").remove();
+    if (
+      errorInputContainer.parentElement &&
+      errorInputContainer.parentElement.querySelector("p")
+    ) {
+      errorInputContainer.parentElement.querySelector("p").remove();
+    }
+  }
+
+  const resultsTableContainer = document.getElementById("results-table");
+  if (resultsTableContainer) {
+    resultsTableContainer.innerHTML = ""; // Isso limpa o conteúdo do contêiner da tabela
   }
 }
 
