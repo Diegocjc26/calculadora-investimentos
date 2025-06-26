@@ -47,7 +47,12 @@ function renderProgression(evt) {
     return;
   }
   resetCharts();
-  // const startingAmount = Number(form["starting-amount"].value);
+
+  const resultsTableContainer = document.getElementById("results-table");
+  if (resultsTableContainer) {
+    resultsTableContainer.innerHTML = ""; // Limpa TODO o conteúdo da tabela (cabeçalho e corpo)
+  }
+  // co nst startingAmount = Number(form["starting-amount"].value);
   const startingAmount = Number(
     document.getElementById("starting-amount").value.replace(",", ".")
   );
@@ -218,12 +223,34 @@ const carouselEl = document.getElementById("carousel");
 const nextButton = document.getElementById("slide-arrow-next");
 const previousButton = document.getElementById("slide-arrow-previous");
 
+function updateCarouselButtonsVisibility() {
+  const currentScroll = carouselEl.scrollLeft;
+  const maxScroll = carouselEl.scrollWidth - carouselEl.clientWidth;
+  if (currentScroll === 0) {
+    previousButton.classList.add("hidden"); // Esconde o botão "anterior"
+    nextButton.classList.remove("hidden"); // Mostra o botão "próximo"
+  } else if (currentScroll === maxScroll) {
+    previousButton.classList.remove("hidden"); // Mostra o botão "anterior"
+    nextButton.classList.add("hidden"); // Esconde o botão "próximo"
+  }
+  // Caso haja mais slides no futuro e não esteja em um dos extremos
+  else {
+    previousButton.classList.remove("hidden");
+    nextButton.classList.remove("hidden");
+  }
+}
+
 nextButton.addEventListener("click", () => {
   carouselEl.scrollLeft += mainEl.clientWidth;
+  updateCarouselButtonsVisibility();
 });
 previousButton.addEventListener("click", () => {
   carouselEl.scrollLeft -= mainEl.clientWidth;
+  updateCarouselButtonsVisibility();
 });
+
+carouselEl.addEventListener("scroll", updateCarouselButtonsVisibility);
+updateCarouselButtonsVisibility();
 
 form.addEventListener("submit", renderProgression);
 // calculateButton.addEventListener("click", renderProgression);
